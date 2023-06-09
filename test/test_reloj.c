@@ -56,6 +56,8 @@
 
 /* === Macros definitions ====================================================================== */
 
+#define TICKS_POR_SEGUNDO 5
+
 /* === Private data type declarations ========================================================== */
 
 /* === Private variable declarations =========================================================== */
@@ -63,10 +65,24 @@
 /* === Private function declarations =========================================================== */
 
 /* === Public variable definitions ============================================================= */
-
+static clock_t reloj;
+static uint8_t hora[6];
 /* === Private variable definitions ============================================================ */
 
 /* === Private function implementation ========================================================= */
+
+/**
+ * @brief Funcion que simula el tiempo en segundos
+ *
+ * @param seconds
+ */
+void SimulateTime(int seconds) {
+    for (int count = 0; count < seconds; count++) {
+        for (int index = 0; index < TICKS_POR_SEGUNDO; index++) {
+            ClockTick(reloj);
+        }
+    }
+}
 
 /* === Public function implementation ========================================================= */
 
@@ -89,6 +105,22 @@ void test_ajustar_hora_valida(void) {
 
     clock_t reloj = ClockCreate(5);
     TEST_ASSERT_TRUE(ClockSetTime(reloj, ESPERADO, 6));
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+// 3. Después de n ciclos de reloj la hora avanza un segundo,
+// diez segundos, un minutos, diez minutos, una hora, diez
+// horas y un día completo.
+
+void test_incrementar_seconds_units(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO); // ticks
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 1};
+
+    SimulateTime(1);
     TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }

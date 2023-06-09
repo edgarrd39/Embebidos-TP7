@@ -88,6 +88,13 @@ bool ClockGetTime(clock_t reloj, uint8_t hora[], int size);
  * @return false
  */
 bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
+
+/**
+ * @brief
+ *
+ * @param reloj
+ */
+void ClockTick(clock_t reloj);
 /* === End of documentation ==================================================================== */
 
 #ifdef __cplusplus

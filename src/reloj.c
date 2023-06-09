@@ -47,7 +47,8 @@
 
 struct clock_s {
     uint8_t hora_actual[6];
-    uint8_t tics_por_segundo;
+    uint8_t ticks_por_segundo;
+    uint8_t ticks;
     bool valida;
 };
 
@@ -63,10 +64,10 @@ struct clock_s {
 
 /* === Public function implementation ========================================================= */
 
-clock_t ClockCreate(int tics_por_segundo) {
+clock_t ClockCreate(int ticks_por_segundo) {
     static struct clock_s self[1];
     memset(self, 0, sizeof(self));
-    self->tics_por_segundo = tics_por_segundo;
+    self->ticks_por_segundo = ticks_por_segundo;
     return self;
 }
 
@@ -81,6 +82,13 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size) {
     return true;
 }
 
+void ClockTick(clock_t reloj) {
+    reloj->ticks++;
+    if (reloj->ticks == reloj->ticks_por_segundo) {
+        reloj->ticks = 0;
+        reloj->hora_actual[5]++;
+    }
+}
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */
