@@ -197,6 +197,17 @@ void test_incrementar_dia(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
+// 4. Fijar la hora de la alarma y consultarla.
+
+void test_fijar_alarma(void) {
+
+    static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    TEST_ASSERT_TRUE(ClockSetAlarma(reloj, ESPERADO, 6));
+    TEST_ASSERT_TRUE(ClockGetAlarma(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */

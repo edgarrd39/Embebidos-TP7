@@ -96,6 +96,28 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
  * @param reloj
  */
 void ClockTick(clock_t reloj);
+
+/**
+ * @brief
+ *
+ * @param reloj
+ * @param hora
+ * @param size
+ * @return true
+ * @return false
+ */
+bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size);
+
+/**
+ * @brief
+ *
+ * @param reloj
+ * @param hora
+ * @param size
+ * @return true
+ * @return false
+ */
+bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size);
 /* === End of documentation ==================================================================== */
 
 #ifdef __cplusplus

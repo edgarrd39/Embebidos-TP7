@@ -47,6 +47,7 @@
 
 struct clock_s {
     uint8_t hora_actual[6];
+    uint8_t hora_alarma[6];
     uint8_t ticks_por_segundo;
     uint8_t ticks;
     bool valida;
@@ -119,6 +120,17 @@ void ClockTick(clock_t reloj) {
         reloj->hora_actual[5] = 0;
     }
 }
+
+bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size) {
+    memcpy(reloj->hora_alarma, hora, 6);
+    return true;
+}
+
+bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
+    memcpy(hora, reloj->hora_alarma, 6);
+    return true;
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */
