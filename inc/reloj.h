@@ -76,9 +76,18 @@ clock_t ClockCreate(int tics_por_segundo);
  * @return true
  * @return false
  */
-
 bool ClockGetTime(clock_t reloj, uint8_t hora[], int size);
 
+/**
+ * @brief Setea la hora del reloj
+ *
+ * @param reloj
+ * @param hora
+ * @param size
+ * @return true
+ * @return false
+ */
+bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
 /* === End of documentation ==================================================================== */
 
 #ifdef __cplusplus

@@ -81,6 +81,18 @@ void test_iniciar_reloj_invalido(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
+// 2.  Al ajustar la hora el reloj queda en hora y es válida.
+
+void test_ajustar_hora_valida(void) {
+    static uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 0};
+    uint8_t hora[6];
+
+    clock_t reloj = ClockCreate(5);
+    TEST_ASSERT_TRUE(ClockSetTime(reloj, ESPERADO, 6));
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */
