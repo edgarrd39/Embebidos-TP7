@@ -116,11 +116,83 @@ void test_ajustar_hora_valida(void) {
 void test_incrementar_seconds_units(void) {
 
     static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO); // ticks
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
     ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 1};
 
     SimulateTime(1);
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+void test_incrementar_segundos_decenas(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {1, 2, 3, 4, 1, 0};
+
+    SimulateTime(10);
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+void test_incrementar_minutos_unidades(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {1, 2, 3, 5, 0, 0};
+
+    SimulateTime(60);
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+void test_incrementar_minutos_decenas(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
+
+    SimulateTime(60 * 10);
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+void test_incrementar_horas_unidades(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {1, 3, 3, 4, 0, 0};
+
+    SimulateTime(60 * 60);
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+void test_incrementar_horas_decenas(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {2, 2, 3, 4, 0, 0};
+
+    SimulateTime(60 * 60 * 10);
+    TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
+void test_incrementar_dia(void) {
+
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 0};
+
+    SimulateTime(60 * 60 * 24);
     TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }

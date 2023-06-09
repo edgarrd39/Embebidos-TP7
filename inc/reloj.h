@@ -59,13 +59,14 @@ typedef struct clock_s * clock_t;
 /* === Public variable declarations ============================================================ */
 
 /* === Public function declarations ============================================================ */
+
 /**
  * @brief
  *
- * @param tics_por_segundo
+ * @param ticks_por_segundo
  * @return clock_t
  */
-clock_t ClockCreate(int tics_por_segundo);
+clock_t ClockCreate(int ticks_por_segundo);
 
 /**
  * @brief

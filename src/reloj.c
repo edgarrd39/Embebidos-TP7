@@ -88,6 +88,36 @@ void ClockTick(clock_t reloj) {
         reloj->ticks = 0;
         reloj->hora_actual[5]++;
     }
+
+    if (reloj->hora_actual[5] == 10) {
+        reloj->hora_actual[5] = 0;
+        reloj->hora_actual[4]++;
+    }
+    if (reloj->hora_actual[4] == 6) {
+        reloj->hora_actual[4] = 0;
+        reloj->hora_actual[3]++;
+    }
+    if (reloj->hora_actual[3] == 10) {
+        reloj->hora_actual[3] = 0;
+        reloj->hora_actual[2]++;
+    }
+    if (reloj->hora_actual[2] == 6) {
+        reloj->hora_actual[2] = 0;
+        reloj->hora_actual[1]++;
+    }
+
+    if (reloj->hora_actual[1] == 10) {
+        reloj->hora_actual[1] = 0;
+        reloj->hora_actual[0]++;
+    }
+    if (reloj->hora_actual[0] == 2 && reloj->hora_actual[1] == 4) {
+        reloj->hora_actual[0] = 0;
+        reloj->hora_actual[1] = 0;
+        reloj->hora_actual[2] = 0;
+        reloj->hora_actual[3] = 0;
+        reloj->hora_actual[4] = 0;
+        reloj->hora_actual[5] = 0;
+    }
 }
 /* === End of documentation ==================================================================== */
 
