@@ -28,19 +28,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* PRUEBAS
-// 1.  Al inicializar el reloj está en 00:00 y con hora invalida.
-// 2.  Al ajustar la hora el reloj queda en hora y es válida.
-// 3. Después de n ciclos de reloj la hora avanza un segundo,
-// diez segundos, un minutos, diez minutos, una hora, diez
-// horas y un día completo.
-// 4. Fijar la hora de la alarma y consultarla.
-// 5. Fijar la alarma y avanzar el reloj para que suene.
-// 6. Fijar la alarma, deshabilitarla y avanzar el reloj para no suene.
-// 7. Hacer sonar la alarma y posponerla.
-// 8. Hacer sonar la alarma y cancelarla hasta el otro dia..
-*/
-
 /** \brief Brief description of the file
  **
  ** Full file description
@@ -52,7 +39,7 @@
 /* === Headers files inclusions =============================================================== */
 
 #include "reloj.h"
-#include "unity.h"
+#include <string.h>
 
 /* === Macros definitions ====================================================================== */
 
@@ -70,15 +57,12 @@
 
 /* === Public function implementation ========================================================= */
 
-// 1.  Al inicializar el reloj está en 00:00 y con hora invalida.
+clock_t ClockCreate(int tics_por_segundo) {
+}
 
-void test_iniciar_reloj_invalido(void) {
-    static uint8_t ESPERADO[] = {0, 0, 0, 0, 0, 0};
-    uint8_t hora[] = {0xFF};
-
-    clock_t reloj = ClockCreate(5);
-    TEST_ASSERT_FALSE(ClockGetTime(reloj, hora, 6));
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+bool ClockGetTime(clock_t reloj, uint8_t * hora, int size) {
+    memset(hora, 0, size);
+    return false;
 }
 
 /* === End of documentation ==================================================================== */
