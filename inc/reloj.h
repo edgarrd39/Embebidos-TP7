@@ -127,6 +127,13 @@ bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size);
  * @return false
  */
 bool ClockActivarAlarma(clock_t reloj);
+
+/**
+ * @brief
+ *
+ * @param reloj
+ */
+void ClockDesactivarAlarma(clock_t reloj);
 /* === End of documentation ==================================================================== */
 
 #ifdef __cplusplus

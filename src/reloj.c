@@ -62,6 +62,7 @@ struct clock_s {
     uint8_t ticks_por_segundo;
     uint8_t ticks;
     bool valida;
+    bool tiene_alarma;
 };
 
 /* === Private variable declarations =========================================================== */
@@ -129,19 +130,24 @@ void ClockTick(clock_t reloj) {
 
 bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size) {
     memcpy(reloj->hora_alarma, hora, size);
+    reloj->tiene_alarma = true;
     return true;
 }
 
 bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
     memcpy(hora, reloj->hora_alarma, size);
-    return true;
+    return reloj->tiene_alarma;
 }
 
 bool ClockActivarAlarma(clock_t reloj) {
-    if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0) {
+    if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0 && (reloj->tiene_alarma == true)) {
         return true;
     } else
         return false;
+}
+
+void ClockDesactivarAlarma(clock_t reloj) {
+    reloj->tiene_alarma = false;
 }
 
 /* === End of documentation ==================================================================== */

@@ -227,6 +227,25 @@ void test_fijar_avanzar_activar_alarma(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
+// 6. Fijar la alarma, deshabilitarla y avanzar el reloj para no suene.
+
+void test_desactivar_alarma(void) {
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
+
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+
+    ClockSetAlarma(reloj, ESPERADO, 6);
+
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SimulateTime(60 * 10);
+    ClockGetTime(reloj, hora, sizeof(hora));
+
+    ClockDesactivarAlarma(reloj);
+    TEST_ASSERT_FALSE(ClockGetAlarma(reloj, hora, 6));
+    TEST_ASSERT_FALSE(ClockActivarAlarma(reloj));
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */
