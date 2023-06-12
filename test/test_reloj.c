@@ -246,6 +246,32 @@ void test_desactivar_alarma(void) {
     TEST_ASSERT_FALSE(ClockActivarAlarma(reloj));
 }
 
+// 7. Hacer sonar la alarma y posponerla.
+void test_posponer_alarma(void) {
+    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    static const uint8_t ALARMA[] = {1, 2, 4, 4, 0, 0};
+    static const uint8_t ESPERADO[] = {1, 2, 4, 9, 0, 0};
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+
+    ClockSetAlarma(reloj, ALARMA, 6);
+    // ClockGetAlarma(reloj, hora, 6);
+
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SimulateTime(60 * 10);
+    ClockGetTime(reloj, hora, sizeof(hora));
+    // Hasta aca, solo compruebo que avance, pero no la estoy activando para que suene
+
+    ClockActivarAlarma(reloj);
+
+    TEST_ASSERT_TRUE(ClockPosponerAlarma(reloj)); // Con esto pospongo alarma
+
+    // Ahora hago que suene dentro de 5 min para probar que suene
+    SimulateTime(60 * 5);
+    ClockGetTime(reloj, hora, sizeof(hora));
+    TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */

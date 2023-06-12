@@ -59,10 +59,12 @@
 struct clock_s {
     uint8_t hora_actual[TIME_SIZE];
     uint8_t hora_alarma[TIME_SIZE];
+    uint8_t hora_pospuesta[TIME_SIZE];
     uint8_t ticks_por_segundo;
     uint8_t ticks;
     bool valida;
     bool tiene_alarma;
+    bool posponer;
 };
 
 /* === Private variable declarations =========================================================== */
@@ -140,6 +142,13 @@ bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
 }
 
 bool ClockActivarAlarma(clock_t reloj) {
+
+    if (reloj->posponer) {
+        if (memcmp(reloj->hora_pospuesta, reloj->hora_actual, 6) == 0) {
+            return true;
+        }
+        return false;
+    }
     if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0 && (reloj->tiene_alarma == true)) {
         return true;
     } else
@@ -150,6 +159,12 @@ void ClockDesactivarAlarma(clock_t reloj) {
     reloj->tiene_alarma = false;
 }
 
+bool ClockPosponerAlarma(clock_t reloj) {
+    mempcpy(reloj->hora_pospuesta, reloj->hora_alarma, 6);
+    reloj->hora_pospuesta[3] += 5;
+    reloj->posponer = true;
+    return reloj->posponer;
+}
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */

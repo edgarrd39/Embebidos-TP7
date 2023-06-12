@@ -134,6 +134,15 @@ bool ClockActivarAlarma(clock_t reloj);
  * @param reloj
  */
 void ClockDesactivarAlarma(clock_t reloj);
+
+/**
+ * @brief
+ *
+ * @param reloj
+ * @return true
+ * @return false
+ */
+bool ClockPosponerAlarma(clock_t reloj);
 /* === End of documentation ==================================================================== */
 
 #ifdef __cplusplus
