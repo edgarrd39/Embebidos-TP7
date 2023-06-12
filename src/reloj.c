@@ -131,6 +131,13 @@ bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
     return true;
 }
 
+bool ClockActivarAlarma(clock_t reloj) {
+    if (memcmp(reloj->hora_alarma, reloj->hora_actual, 6) == 0) {
+        return true;
+    } else
+        return false;
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */
