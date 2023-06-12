@@ -43,11 +43,22 @@
 
 /* === Macros definitions ====================================================================== */
 
+#define TIME_SIZE 6
+
+#define SEGUNDOS_UNIDADES 5
+#define SEGUNDOS_DECENAS 4
+#define MINUTOS_UNIDADES 3
+#define MINUTOS_DECENAS 2
+#define HORA_UNIDADES 1
+#define HORA_DECENAS 0
+#define MAX_HR_UNI 4 // Unidad maxima de hora
+#define MAX_HR_DEC 2 // Decena maxima de hora
+
 /* === Private data type declarations ========================================================== */
 
 struct clock_s {
-    uint8_t hora_actual[6];
-    uint8_t hora_alarma[6];
+    uint8_t hora_actual[TIME_SIZE];
+    uint8_t hora_alarma[TIME_SIZE];
     uint8_t ticks_por_segundo;
     uint8_t ticks;
     bool valida;
@@ -87,52 +98,47 @@ void ClockTick(clock_t reloj) {
     reloj->ticks++;
     if (reloj->ticks == reloj->ticks_por_segundo) {
         reloj->ticks = 0;
-        reloj->hora_actual[5]++;
+        reloj->hora_actual[SEGUNDOS_UNIDADES]++;
     }
 
-    if (reloj->hora_actual[5] == 10) {
-        reloj->hora_actual[5] = 0;
-        reloj->hora_actual[4]++;
+    if (reloj->hora_actual[SEGUNDOS_UNIDADES] == 10) {
+        reloj->hora_actual[SEGUNDOS_UNIDADES] = 0;
+        reloj->hora_actual[SEGUNDOS_DECENAS]++;
     }
-    if (reloj->hora_actual[4] == 6) {
-        reloj->hora_actual[4] = 0;
-        reloj->hora_actual[3]++;
+    if (reloj->hora_actual[SEGUNDOS_DECENAS] == 6) {
+        reloj->hora_actual[SEGUNDOS_DECENAS] = 0;
+        reloj->hora_actual[MINUTOS_UNIDADES]++;
     }
-    if (reloj->hora_actual[3] == 10) {
-        reloj->hora_actual[3] = 0;
-        reloj->hora_actual[2]++;
+    if (reloj->hora_actual[MINUTOS_UNIDADES] == 10) {
+        reloj->hora_actual[MINUTOS_UNIDADES] = 0;
+        reloj->hora_actual[MINUTOS_DECENAS]++;
     }
-    if (reloj->hora_actual[2] == 6) {
-        reloj->hora_actual[2] = 0;
-        reloj->hora_actual[1]++;
+    if (reloj->hora_actual[MINUTOS_DECENAS] == 6) {
+        reloj->hora_actual[MINUTOS_DECENAS] = 0;
+        reloj->hora_actual[HORA_UNIDADES]++;
     }
 
-    if (reloj->hora_actual[1] == 10) {
-        reloj->hora_actual[1] = 0;
-        reloj->hora_actual[0]++;
+    if (reloj->hora_actual[HORA_UNIDADES] == 10) {
+        reloj->hora_actual[HORA_UNIDADES] = 0;
+        reloj->hora_actual[HORA_DECENAS]++;
     }
-    if (reloj->hora_actual[0] == 2 && reloj->hora_actual[1] == 4) {
-        reloj->hora_actual[0] = 0;
-        reloj->hora_actual[1] = 0;
-        reloj->hora_actual[2] = 0;
-        reloj->hora_actual[3] = 0;
-        reloj->hora_actual[4] = 0;
-        reloj->hora_actual[5] = 0;
+    if (reloj->hora_actual[HORA_DECENAS] == MAX_HR_DEC && reloj->hora_actual[HORA_UNIDADES] == MAX_HR_UNI) {
+        memset(reloj->hora_actual, 0, sizeof(reloj->hora_actual));
     }
 }
 
 bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size) {
-    memcpy(reloj->hora_alarma, hora, 6);
+    memcpy(reloj->hora_alarma, hora, size);
     return true;
 }
 
 bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
-    memcpy(hora, reloj->hora_alarma, 6);
+    memcpy(hora, reloj->hora_alarma, size);
     return true;
 }
 
 bool ClockActivarAlarma(clock_t reloj) {
-    if (memcmp(reloj->hora_alarma, reloj->hora_actual, 6) == 0) {
+    if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0) {
         return true;
     } else
         return false;
