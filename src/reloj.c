@@ -81,33 +81,33 @@ void CompararHoraConAlarma(clock_t reloj);
 
 /* === Private function implementation ========================================================= */
 
-void IncrementarTiempo(uint8_t * hora_actual) {
+void IncrementarTiempo(uint8_t * hora) {
 
-    hora_actual[SEGUNDOS_UNIDADES]++;
+    hora[SEGUNDOS_UNIDADES]++;
 
-    if (hora_actual[SEGUNDOS_UNIDADES] == 10) {
-        hora_actual[SEGUNDOS_UNIDADES] = 0;
-        hora_actual[SEGUNDOS_DECENAS]++;
+    if (hora[SEGUNDOS_UNIDADES] == 10) {
+        hora[SEGUNDOS_UNIDADES] = 0;
+        hora[SEGUNDOS_DECENAS]++;
     }
-    if (hora_actual[SEGUNDOS_DECENAS] == 6) {
-        hora_actual[SEGUNDOS_DECENAS] = 0;
-        hora_actual[MINUTOS_UNIDADES]++;
+    if (hora[SEGUNDOS_DECENAS] == 6) {
+        hora[SEGUNDOS_DECENAS] = 0;
+        hora[MINUTOS_UNIDADES]++;
     }
-    if (hora_actual[MINUTOS_UNIDADES] == 10) {
-        hora_actual[MINUTOS_UNIDADES] = 0;
-        hora_actual[MINUTOS_DECENAS]++;
+    if (hora[MINUTOS_UNIDADES] == 10) {
+        hora[MINUTOS_UNIDADES] = 0;
+        hora[MINUTOS_DECENAS]++;
     }
-    if (hora_actual[MINUTOS_DECENAS] == 6) {
-        hora_actual[MINUTOS_DECENAS] = 0;
-        hora_actual[HORA_UNIDADES]++;
+    if (hora[MINUTOS_DECENAS] == 6) {
+        hora[MINUTOS_DECENAS] = 0;
+        hora[HORA_UNIDADES]++;
     }
 
-    if (hora_actual[HORA_UNIDADES] == 10) {
-        hora_actual[HORA_UNIDADES] = 0;
-        hora_actual[HORA_DECENAS]++;
+    if (hora[HORA_UNIDADES] == 10) {
+        hora[HORA_UNIDADES] = 0;
+        hora[HORA_DECENAS]++;
     }
-    if (hora_actual[HORA_DECENAS] == MAX_HR_DEC && hora_actual[HORA_UNIDADES] == MAX_HR_UNI) {
-        memset(hora_actual, 0, TIME_SIZE);
+    if (hora[HORA_DECENAS] == MAX_HR_DEC && hora[HORA_UNIDADES] == MAX_HR_UNI) {
+        memset(hora, 0, TIME_SIZE);
     }
 }
 
@@ -156,6 +156,10 @@ bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size) {
 
 bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
     memcpy(hora, reloj->hora_alarma, size);
+    return reloj->tiene_alarma;
+}
+
+bool ClockGetStateAlarm(clock_t reloj) {
     return reloj->tiene_alarma;
 }
 

@@ -242,14 +242,13 @@ void test_posponer_alarma(void) {
     ClockSetAlarma(reloj, ALARMA, 6);
 
     SimulateTime(60 * 10);
-    ClockGetTime(reloj, hora, sizeof(hora));
-    // ClockActivarAlarma(reloj);
-
+    TEST_ASSERT_TRUE(estado_alarma);              // La alarma esta sonando
+    estado_alarma = false;                        // la alarma no esta sonando
     TEST_ASSERT_TRUE(ClockPosponerAlarma(reloj)); // Con esto pospongo alarma
 
+    TEST_ASSERT_FALSE(estado_alarma); // compruebo que la alarma no este sonando
     SimulateTime(60 * 5);
     ClockGetTime(reloj, hora, sizeof(hora));
-    // TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
