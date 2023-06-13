@@ -64,9 +64,12 @@
 
 /* === Private function declarations =========================================================== */
 
+void SetUp(void);
+
 /* === Public variable definitions ============================================================= */
 static clock_t reloj;
 static uint8_t hora[6];
+static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
 /* === Private variable definitions ============================================================ */
 
 /* === Private function implementation ========================================================= */
@@ -82,6 +85,11 @@ void SimulateTime(int seconds) {
             ClockTick(reloj);
         }
     }
+}
+
+void SetUp(void) {
+    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
 }
 
 /* === Public function implementation ========================================================= */
@@ -115,9 +123,7 @@ void test_ajustar_hora_valida(void) {
 
 void test_incrementar_seconds_units(void) {
 
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 1};
 
     SimulateTime(1);
@@ -127,9 +133,7 @@ void test_incrementar_seconds_units(void) {
 
 void test_incrementar_segundos_decenas(void) {
 
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 1, 0};
 
     SimulateTime(10);
@@ -138,10 +142,7 @@ void test_incrementar_segundos_decenas(void) {
 }
 
 void test_incrementar_minutos_unidades(void) {
-
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 3, 5, 0, 0};
 
     SimulateTime(60);
@@ -150,10 +151,7 @@ void test_incrementar_minutos_unidades(void) {
 }
 
 void test_incrementar_minutos_decenas(void) {
-
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
 
     SimulateTime(60 * 10);
@@ -162,10 +160,7 @@ void test_incrementar_minutos_decenas(void) {
 }
 
 void test_incrementar_horas_unidades(void) {
-
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 3, 3, 4, 0, 0};
 
     SimulateTime(60 * 60);
@@ -174,10 +169,7 @@ void test_incrementar_horas_unidades(void) {
 }
 
 void test_incrementar_horas_decenas(void) {
-
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {2, 2, 3, 4, 0, 0};
 
     SimulateTime(60 * 60 * 10);
@@ -186,10 +178,7 @@ void test_incrementar_horas_decenas(void) {
 }
 
 void test_incrementar_dia(void) {
-
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 0};
 
     SimulateTime(60 * 60 * 24);
@@ -200,9 +189,9 @@ void test_incrementar_dia(void) {
 // 4. Fijar la hora de la alarma y consultarla.
 
 void test_fijar_alarma(void) {
-
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+
     TEST_ASSERT_TRUE(ClockSetAlarma(reloj, ESPERADO, 6));
     TEST_ASSERT_TRUE(ClockGetAlarma(reloj, hora, 6));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
@@ -211,15 +200,11 @@ void test_fijar_alarma(void) {
 // 5. Fijar la alarma y avanzar el reloj para que suene.
 
 void test_fijar_avanzar_activar_alarma(void) {
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
 
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-
     ClockSetAlarma(reloj, ESPERADO, 6);
-    // ClockGetAlarma(reloj, hora, 6);
 
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
     SimulateTime(60 * 10);
     ClockGetTime(reloj, hora, sizeof(hora));
 
@@ -230,14 +215,10 @@ void test_fijar_avanzar_activar_alarma(void) {
 // 6. Fijar la alarma, deshabilitarla y avanzar el reloj para no suene.
 
 void test_desactivar_alarma(void) {
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
-
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
-
     ClockSetAlarma(reloj, ESPERADO, 6);
 
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
     SimulateTime(60 * 10);
     ClockGetTime(reloj, hora, sizeof(hora));
 
@@ -248,24 +229,18 @@ void test_desactivar_alarma(void) {
 
 // 7. Hacer sonar la alarma y posponerla.
 void test_posponer_alarma(void) {
-    static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+    SetUp();
     static const uint8_t ALARMA[] = {1, 2, 4, 4, 0, 0};
     static const uint8_t ESPERADO[] = {1, 2, 4, 9, 0, 0};
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
 
     ClockSetAlarma(reloj, ALARMA, 6);
-    // ClockGetAlarma(reloj, hora, 6);
 
-    ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
     SimulateTime(60 * 10);
     ClockGetTime(reloj, hora, sizeof(hora));
-    // Hasta aca, solo compruebo que avance, pero no la estoy activando para que suene
-
     ClockActivarAlarma(reloj);
 
     TEST_ASSERT_TRUE(ClockPosponerAlarma(reloj)); // Con esto pospongo alarma
 
-    // Ahora hago que suene dentro de 5 min para probar que suene
     SimulateTime(60 * 5);
     ClockGetTime(reloj, hora, sizeof(hora));
     TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
