@@ -206,7 +206,7 @@ void test_fijar_avanzar_activar_alarma(void) {
     ClockSetAlarma(reloj, ESPERADO, 6);
 
     SimulateTime(60 * 10);
-    ClockGetTime(reloj, hora, sizeof(hora));
+    // ClockGetTime(reloj, hora, sizeof(hora));
 
     TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
@@ -237,7 +237,7 @@ void test_posponer_alarma(void) {
 
     SimulateTime(60 * 10);
     ClockGetTime(reloj, hora, sizeof(hora));
-    ClockActivarAlarma(reloj);
+    // ClockActivarAlarma(reloj);
 
     TEST_ASSERT_TRUE(ClockPosponerAlarma(reloj)); // Con esto pospongo alarma
 

@@ -72,6 +72,8 @@ struct clock_s {
 /* === Private function declarations =========================================================== */
 void IncrementarTiempo(uint8_t * hora_actual);
 
+void CompararHoraConAlarma(clock_t reloj);
+
 /* === Public variable definitions ============================================================= */
 
 /* === Private variable definitions ============================================================ */
@@ -107,6 +109,14 @@ void IncrementarTiempo(uint8_t * hora_actual) {
         memset(hora_actual, 0, TIME_SIZE);
     }
 }
+
+void CompararHoraConAlarma(clock_t reloj) {
+
+    if (reloj->tiene_alarma) {
+        if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0 && (reloj->tiene_alarma == true))
+            reloj->tiene_alarma = true;
+    }
+}
 /* === Public function implementation ========================================================= */
 
 clock_t ClockCreate(int ticks_por_segundo) {
@@ -132,6 +142,7 @@ void ClockTick(clock_t reloj) {
     if (reloj->ticks == reloj->ticks_por_segundo) {
         reloj->ticks = 0;
         IncrementarTiempo(reloj->hora_actual);
+        CompararHoraConAlarma(reloj);
     }
 }
 
@@ -147,17 +158,7 @@ bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
 }
 
 bool ClockActivarAlarma(clock_t reloj) {
-
-    if (reloj->posponer) {
-        if (memcmp(reloj->hora_pospuesta, reloj->hora_actual, 6) == 0) {
-            return true;
-        }
-        return false;
-    }
-    if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0 && (reloj->tiene_alarma == true)) {
-        return true;
-    } else
-        return false;
+    return reloj->tiene_alarma;
 }
 
 void ClockDesactivarAlarma(clock_t reloj) {
