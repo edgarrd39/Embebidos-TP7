@@ -70,6 +70,7 @@ struct clock_s {
 /* === Private variable declarations =========================================================== */
 
 /* === Private function declarations =========================================================== */
+void IncrementarTiempo(uint8_t * hora_actual);
 
 /* === Public variable definitions ============================================================= */
 
@@ -77,6 +78,35 @@ struct clock_s {
 
 /* === Private function implementation ========================================================= */
 
+void IncrementarTiempo(uint8_t * hora_actual) {
+
+    hora_actual[SEGUNDOS_UNIDADES]++;
+
+    if (hora_actual[SEGUNDOS_UNIDADES] == 10) {
+        hora_actual[SEGUNDOS_UNIDADES] = 0;
+        hora_actual[SEGUNDOS_DECENAS]++;
+    }
+    if (hora_actual[SEGUNDOS_DECENAS] == 6) {
+        hora_actual[SEGUNDOS_DECENAS] = 0;
+        hora_actual[MINUTOS_UNIDADES]++;
+    }
+    if (hora_actual[MINUTOS_UNIDADES] == 10) {
+        hora_actual[MINUTOS_UNIDADES] = 0;
+        hora_actual[MINUTOS_DECENAS]++;
+    }
+    if (hora_actual[MINUTOS_DECENAS] == 6) {
+        hora_actual[MINUTOS_DECENAS] = 0;
+        hora_actual[HORA_UNIDADES]++;
+    }
+
+    if (hora_actual[HORA_UNIDADES] == 10) {
+        hora_actual[HORA_UNIDADES] = 0;
+        hora_actual[HORA_DECENAS]++;
+    }
+    if (hora_actual[HORA_DECENAS] == MAX_HR_DEC && hora_actual[HORA_UNIDADES] == MAX_HR_UNI) {
+        memset(hora_actual, 0, TIME_SIZE);
+    }
+}
 /* === Public function implementation ========================================================= */
 
 clock_t ClockCreate(int ticks_por_segundo) {
@@ -101,32 +131,7 @@ void ClockTick(clock_t reloj) {
     reloj->ticks++;
     if (reloj->ticks == reloj->ticks_por_segundo) {
         reloj->ticks = 0;
-        reloj->hora_actual[SEGUNDOS_UNIDADES]++;
-    }
-
-    if (reloj->hora_actual[SEGUNDOS_UNIDADES] == 10) {
-        reloj->hora_actual[SEGUNDOS_UNIDADES] = 0;
-        reloj->hora_actual[SEGUNDOS_DECENAS]++;
-    }
-    if (reloj->hora_actual[SEGUNDOS_DECENAS] == 6) {
-        reloj->hora_actual[SEGUNDOS_DECENAS] = 0;
-        reloj->hora_actual[MINUTOS_UNIDADES]++;
-    }
-    if (reloj->hora_actual[MINUTOS_UNIDADES] == 10) {
-        reloj->hora_actual[MINUTOS_UNIDADES] = 0;
-        reloj->hora_actual[MINUTOS_DECENAS]++;
-    }
-    if (reloj->hora_actual[MINUTOS_DECENAS] == 6) {
-        reloj->hora_actual[MINUTOS_DECENAS] = 0;
-        reloj->hora_actual[HORA_UNIDADES]++;
-    }
-
-    if (reloj->hora_actual[HORA_UNIDADES] == 10) {
-        reloj->hora_actual[HORA_UNIDADES] = 0;
-        reloj->hora_actual[HORA_DECENAS]++;
-    }
-    if (reloj->hora_actual[HORA_DECENAS] == MAX_HR_DEC && reloj->hora_actual[HORA_UNIDADES] == MAX_HR_UNI) {
-        memset(reloj->hora_actual, 0, sizeof(reloj->hora_actual));
+        IncrementarTiempo(reloj->hora_actual);
     }
 }
 
