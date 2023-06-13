@@ -114,7 +114,7 @@ void IncrementarTiempo(uint8_t * hora) {
 void CompararHoraConAlarma(clock_t reloj) {
 
     if (reloj->tiene_alarma) {
-        if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0 && (reloj->tiene_alarma == true))
+        if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0)
             reloj->evento();
     }
 }

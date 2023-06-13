@@ -252,6 +252,19 @@ void test_posponer_alarma(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
+// 8. Hacer sonar la alarma y cancelarla hasta el otro dia.
+void test_cancelar_hasta_otro_dia(void) {
+    SetUp();
+    static const uint8_t ALARMA[] = {1, 2, 4, 4, 0, 0};
+
+    ClockSetAlarma(reloj, ALARMA, 6);
+    SimulateTime(60 * 10);
+    TEST_ASSERT_TRUE(estado_alarma);
+    estado_alarma = false;
+    SimulateTime(60 * 60 * 24);
+    TEST_ASSERT_TRUE(estado_alarma);
+}
+
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */
