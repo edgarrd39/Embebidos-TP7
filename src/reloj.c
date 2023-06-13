@@ -62,6 +62,7 @@ struct clock_s {
     uint8_t hora_pospuesta[TIME_SIZE];
     uint8_t ticks_por_segundo;
     uint8_t ticks;
+    alarma_evento_t evento;
     bool valida;
     bool tiene_alarma;
     bool posponer;
@@ -114,15 +115,16 @@ void CompararHoraConAlarma(clock_t reloj) {
 
     if (reloj->tiene_alarma) {
         if (memcmp(reloj->hora_alarma, reloj->hora_actual, TIME_SIZE) == 0 && (reloj->tiene_alarma == true))
-            reloj->tiene_alarma = true;
+            reloj->evento();
     }
 }
 /* === Public function implementation ========================================================= */
 
-clock_t ClockCreate(int ticks_por_segundo) {
+clock_t ClockCreate(int ticks_por_segundo, alarma_evento_t evento) {
     static struct clock_s self[1];
     memset(self, 0, sizeof(self));
     self->ticks_por_segundo = ticks_por_segundo;
+    self->evento = evento;
     return self;
 }
 
@@ -154,10 +156,6 @@ bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size) {
 
 bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size) {
     memcpy(hora, reloj->hora_alarma, size);
-    return reloj->tiene_alarma;
-}
-
-bool ClockActivarAlarma(clock_t reloj) {
     return reloj->tiene_alarma;
 }
 

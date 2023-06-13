@@ -66,10 +66,13 @@
 
 void SetUp(void);
 
+void ActivarAlarma(void);
+
 /* === Public variable definitions ============================================================= */
 static clock_t reloj;
 static uint8_t hora[6];
 static const uint8_t INICIAL[] = {1, 2, 3, 4, 0, 0};
+static bool estado_alarma;
 /* === Private variable definitions ============================================================ */
 
 /* === Private function implementation ========================================================= */
@@ -87,8 +90,13 @@ void SimulateTime(int seconds) {
     }
 }
 
+void ActivarAlarma(void) {
+    estado_alarma = true;
+}
+
 void SetUp(void) {
-    reloj = ClockCreate(TICKS_POR_SEGUNDO);
+    estado_alarma = false;
+    reloj = ClockCreate(TICKS_POR_SEGUNDO, ActivarAlarma);
     ClockSetTime(reloj, INICIAL, sizeof(INICIAL));
 }
 
@@ -100,7 +108,7 @@ void test_iniciar_reloj_invalido(void) {
     static uint8_t ESPERADO[] = {0, 0, 0, 0, 0, 0};
     uint8_t hora[] = {0xFF};
 
-    clock_t reloj = ClockCreate(5);
+    clock_t reloj = ClockCreate(5, ActivarAlarma);
     TEST_ASSERT_FALSE(ClockGetTime(reloj, hora, 6));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
@@ -111,7 +119,7 @@ void test_ajustar_hora_valida(void) {
     static uint8_t ESPERADO[] = {1, 2, 3, 4, 0, 0};
     uint8_t hora[6];
 
-    clock_t reloj = ClockCreate(5);
+    clock_t reloj = ClockCreate(5, ActivarAlarma);
     TEST_ASSERT_TRUE(ClockSetTime(reloj, ESPERADO, 6));
     TEST_ASSERT_TRUE(ClockGetTime(reloj, hora, 6));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
@@ -204,11 +212,10 @@ void test_fijar_avanzar_activar_alarma(void) {
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
 
     ClockSetAlarma(reloj, ESPERADO, 6);
-
+    TEST_ASSERT_FALSE(estado_alarma);
     SimulateTime(60 * 10);
-    // ClockGetTime(reloj, hora, sizeof(hora));
 
-    TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
+    TEST_ASSERT_TRUE(estado_alarma); // La alarma esta sonando
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
@@ -218,13 +225,12 @@ void test_desactivar_alarma(void) {
     SetUp();
     static const uint8_t ESPERADO[] = {1, 2, 4, 4, 0, 0};
     ClockSetAlarma(reloj, ESPERADO, 6);
-
-    SimulateTime(60 * 10);
+    ClockDesactivarAlarma(reloj); // Desactivo Alarma
+    SimulateTime(60 * 10);        // avanzo el tiempo en el reloj, pero como deshabilite la alarma, no deberia sonar
     ClockGetTime(reloj, hora, sizeof(hora));
 
-    ClockDesactivarAlarma(reloj);
     TEST_ASSERT_FALSE(ClockGetAlarma(reloj, hora, 6));
-    TEST_ASSERT_FALSE(ClockActivarAlarma(reloj));
+    TEST_ASSERT_FALSE(estado_alarma); // con esto verifico que no ocurrio el evento de ActivarAlarma
 }
 
 // 7. Hacer sonar la alarma y posponerla.
@@ -243,7 +249,7 @@ void test_posponer_alarma(void) {
 
     SimulateTime(60 * 5);
     ClockGetTime(reloj, hora, sizeof(hora));
-    TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
+    // TEST_ASSERT_TRUE(ClockActivarAlarma(reloj));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 

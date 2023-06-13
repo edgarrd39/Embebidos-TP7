@@ -56,6 +56,8 @@ extern "C" {
 
 typedef struct clock_s * clock_t;
 
+typedef void (*alarma_evento_t)(void);
+
 /* === Public variable declarations ============================================================ */
 
 /* === Public function declarations ============================================================ */
@@ -66,7 +68,7 @@ typedef struct clock_s * clock_t;
  * @param ticks_por_segundo
  * @return clock_t
  */
-clock_t ClockCreate(int ticks_por_segundo);
+clock_t ClockCreate(int ticks_por_segundo, alarma_evento_t evento);
 
 /**
  * @brief
@@ -118,15 +120,6 @@ bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size);
  * @return false
  */
 bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size);
-
-/**
- * @brief
- *
- * @param reloj
- * @return true
- * @return false
- */
-bool ClockActivarAlarma(clock_t reloj);
 
 /**
  * @brief
