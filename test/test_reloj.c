@@ -249,6 +249,7 @@ void test_posponer_alarma(void) {
     TEST_ASSERT_FALSE(estado_alarma); // compruebo que la alarma no este sonando
     SimulateTime(60 * 5);
     ClockGetTime(reloj, hora, sizeof(hora));
+    TEST_ASSERT_TRUE(estado_alarma);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, 6);
 }
 
@@ -264,6 +265,9 @@ void test_cancelar_hasta_otro_dia(void) {
     SimulateTime(60 * 60 * 24);
     TEST_ASSERT_TRUE(estado_alarma);
 }
+
+// 9 Probar que suena alarma, luego posponer, pero al otro dia debe sonar a la hora que estaba
+// configurada originalmente
 
 /* === End of documentation ==================================================================== */
 

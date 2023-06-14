@@ -10,3 +10,7 @@ horas y un día completo.
 6. Fijar la alarma, deshabilitarla y avanzar el reloj para no suene.
 7. Hacer sonar la alarma y posponerla.
 8. Hacer sonar la alarma y cancelarla hasta el otro dia.
+
+Agregados
+
+9. Probar que suena alarma, luego posponer, pero al otro dia debe sonar a la hora que estaba configurada originalmente (No realizado)
