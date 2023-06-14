@@ -132,10 +132,11 @@ void ClockDesactivarAlarma(clock_t reloj);
  * @brief
  *
  * @param reloj
+ * @param minutos
  * @return true
  * @return false
  */
-bool ClockPosponerAlarma(clock_t reloj);
+bool ClockPosponerAlarma(clock_t reloj, uint8_t minutos);
 
 /**
  * @brief
