@@ -168,7 +168,7 @@ void ClockDesactivarAlarma(clock_t reloj) {
 }
 
 bool ClockPosponerAlarma(clock_t reloj, uint8_t minutos) {
-    mempcpy(reloj->hora_pospuesta, reloj->hora_alarma, 6);
+    memcpy(reloj->hora_pospuesta, reloj->hora_alarma, 6);
     reloj->hora_alarma[3] += minutos; // por ahora solo del 1 al 9
     reloj->posponer = true;
     return reloj->posponer;

@@ -266,9 +266,6 @@ void test_cancelar_hasta_otro_dia(void) {
     TEST_ASSERT_TRUE(estado_alarma);
 }
 
-// 9 Probar que suena alarma, luego posponer, pero al otro dia debe sonar a la hora que estaba
-// configurada originalmente
-
 /* === End of documentation ==================================================================== */
 
 /** @} End of module definition for doxygen */

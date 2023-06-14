@@ -31,12 +31,12 @@
 #ifndef reloj_H
 #define reloj_H
 
-/** \brief Brief description of the file
+/** \brief Libreria para gestion un reloj
  **
- ** Full file description
- **
- ** \addtogroup name Module denomination
- ** \brief Brief description of the module
+ ** Conjunto de funciones y metodos para hacer funcionar un reloj despertador
+ ** Desde configurar hora, ver hora, configurar alarma, y posponer alarma
+ ** \addtogroup reloj RELOJ
+ ** \brief Libreria para gestionar un reloj
  ** @{ */
 
 /* === Headers files inclusions ================================================================ */
@@ -54,8 +54,10 @@ extern "C" {
 
 /* === Public data type declarations =========================================================== */
 
+//!< Referencia a un descriptor para gestionar un reloj
 typedef struct clock_s * clock_t;
 
+//!< Funcion de callback para eventos de alarma
 typedef void (*alarma_evento_t)(void);
 
 /* === Public variable declarations ============================================================ */
@@ -63,85 +65,86 @@ typedef void (*alarma_evento_t)(void);
 /* === Public function declarations ============================================================ */
 
 /**
- * @brief
+ * @brief  Metodo para crear un reloj
  *
- * @param ticks_por_segundo
- * @return clock_t
+ * @param ticks_por_segundo Cantidad de pulsos que debe recibir para contar un segundo.
+ * @param evento            Funcion de callback para evento de alarma.
+ * @return clock_t          Puntero con el descriptor del nuevo reloj creado.
  */
 clock_t ClockCreate(int ticks_por_segundo, alarma_evento_t evento);
 
 /**
- * @brief
+ * @brief Funcion para obtener la hora actual del reloj
  *
- * @param reloj
- * @param hora
- * @param size
- * @return true
- * @return false
+ * @param reloj     Puntero al descriptor obtenido al crear el reloj
+ * @param hora      Vector donde se devuelve la hora, minutos y segundos en formato BCD
+ * @param size      Cantidad de elementos del vector
+ * @return true     La hora del reloj es valida
+ * @return false    La hora del reloj es invalida
  */
 bool ClockGetTime(clock_t reloj, uint8_t hora[], int size);
 
 /**
- * @brief Setea la hora del reloj
+ * @brief Funcion para poner en hora el reloj
  *
- * @param reloj
- * @param hora
- * @param size
+ * @param reloj     Puntero al descriptor obtenido al crear el reloj
+ * @param hora      Vector donde se devuelve la hora, minutos y segundos en formato BCD
+ * @param size      Cantidad de elementos del vector
  * @return true
  * @return false
  */
 bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
 
 /**
- * @brief
+ * @brief Funcion para contar un nuevo tick de reloj, actualizar hora y verificar alarma
  *
- * @param reloj
+ * @param reloj  Puntero al descriptor obtenido al crear el reloj
  */
 void ClockTick(clock_t reloj);
 
 /**
- * @brief
+ * @brief Funcion para setear la alarma del reloj
  *
- * @param reloj
- * @param hora
- * @param size
+ * @param reloj  Puntero al descriptor obtenido para crear el reloj
+ * @param hora   Vector donde se devuelve la hora, minutos y segundos en formato BCD de la alarma
+ * @param size   Cantidad de elementos del vector
  * @return true
  * @return false
  */
 bool ClockSetAlarma(clock_t reloj, const uint8_t * hora, int size);
 
 /**
- * @brief
+ * @brief  Funcion que obtiene la hora de la alarma
  *
- * @param reloj
- * @param hora
- * @param size
+ * @param reloj  Puntero al descriptor obtenido al crear el reloj
+ * @param hora   Vector donde se devuelve la hora, minutos y segundos en formato BCD de la alarma
+ * @param size   Cantidad de elementos del vector
  * @return true
  * @return false
  */
 bool ClockGetAlarma(clock_t reloj, uint8_t * hora, int size);
 
 /**
- * @brief
+ * @brief Funcion que desactiva la alarma
  *
- * @param reloj
+ * @param reloj Puntero al descriptor obtenido al crear el reloj
  */
 void ClockDesactivarAlarma(clock_t reloj);
 
 /**
- * @brief
+ * @brief Funcion que pospone la alarma una cantidad arbitraria de minutos
  *
- * @param reloj
- * @param minutos
+ * @param reloj  Puntero al descriptor obtenido al crear el reloj
+ * @param minutos Cantidad de minutos que se desea posponer
  * @return true
  * @return false
  */
 bool ClockPosponerAlarma(clock_t reloj, uint8_t minutos);
 
 /**
- * @brief
+ * @brief  Funcion que obtiene el estado de la alarma
  *
- * @param reloj
+ * @param reloj Puntero al descriptor obtenido al crear el reloj
  * @return true
  * @return false
  */
